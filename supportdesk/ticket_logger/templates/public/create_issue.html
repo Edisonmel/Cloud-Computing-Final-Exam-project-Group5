@@ -1,0 +1,195 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Submit IT Issue</title>
+
+    <!-- Bootstrap -->
+    <link rel="stylesheet"
+          href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+
+    <style>
+        body {
+            background-color: #f4f6f9;
+        }
+
+        /* =======================
+           TOP NAV HEADER (NEW)
+        ======================== */
+        .top-header {
+            background: linear-gradient(135deg, #3b3ff7 0%, #6b4df7 100%);
+            color: white;
+            padding: 12px 20px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            font-size: 1.25rem;
+            font-weight: 600;
+        }
+
+        .top-header .menu-icon {
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+
+        .top-header img.logo {
+            width: 50px;
+            height: 50px;
+        }
+
+        /* HERO SECTION */
+        .hero-section {
+            background: linear-gradient(135deg, #3b3ff7 0%, #6b4df7 100%);
+            padding: 60px 20px;
+            text-align: center;
+            color: white;
+            margin-top: -10px; /* Adjust to blend with header */
+        }
+
+        .issue-form-card {
+            background: white;
+            border-radius: 12px;
+            padding: 30px;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.1);
+            margin-top: -5px;
+        }
+
+        .form-label {
+            font-weight: 600;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- ==============================
+         TOP HEADER BAR (NEW)
+    =============================== -->
+    <div class="top-header">
+
+        <!-- Replace with your real logo if needed -->
+        <img src="{% static 'images/ds_logo.jpeg' %}" class="logo" alt="Group5">
+
+        <span>Group5 IT Service Desk Logger</span>
+    </div>
+
+    <!-- HERO SECTION -->
+    <div class="hero-section">
+        <h2 class="fw-bold">Hi, how can we help you?</h2>
+    </div>
+
+    <!-- ISSUE FORM -->
+    <div class="container">
+        <div class="col-lg-8 mx-auto issue-form-card">
+
+            <h3 class="mb-4 text-center fw-semibold">Report an IT Issue</h3>
+
+            {% if messages %}
+                {% for m in messages %}
+                    <div class="alert alert-{{ m.tags }} text-center">
+                        {{ m }}
+                    </div>
+                {% endfor %}
+            {% endif %}
+
+            <form method="POST" enctype="multipart/form-data" autocomplete="off">
+                {% csrf_token %}
+
+                <!-- Full Name -->
+                <div class="mb-3">
+                    <label class="form-label">Your Full Name</label>
+                    <input type="text" name="submitter_fullname"
+                           value="{{ form_data.submitter_fullname }}"
+                           class="form-control" required>
+                </div>
+
+                <!-- Email -->
+                <div class="mb-3">
+                    <label class="form-label">Email Address</label>
+                    <input type="email" name="submitter_email"
+                           value="{{ form_data.submitter_email }}"
+                           class="form-control" required>
+                </div>
+
+                <!-- Department -->
+                <div class="mb-3">
+                    <label class="form-label">Department</label>
+                    <select name="submitter_department" class="form-select" required>
+                        <option value="">-- Select Department --</option>
+
+                        <option value="Finance"
+                            {% if form_data.submitter_department == "Finance" %}selected{% endif %}>
+                            Finance
+                        </option>
+
+                        <option value="Business Growth"
+                            {% if form_data.submitter_department == "Business Growth" %}selected{% endif %}>
+                            Business Growth
+                        </option>
+
+                        <option value="Operations"
+                            {% if form_data.submitter_department == "Operations" %}selected{% endif %}>
+                            Operations
+                        </option>
+
+                        <option value="P&C"
+                            {% if form_data.submitter_department == "P&C" %}selected{% endif %}>
+                            P&C (People & Culture)
+                        </option>
+
+                        <option value="IT"
+                            {% if form_data.submitter_department == "IT" %}selected{% endif %}>
+                            IT
+                        </option>
+
+                        <option value="Administration"
+                            {% if form_data.submitter_department == "Administration" %}selected{% endif %}>
+                            Administration
+                        </option>
+                    </select>
+                </div>
+
+                <!-- Category -->
+                <div class="mb-3">
+                    <label class="form-label">Issue Category</label>
+                    <select name="category" class="form-select" required>
+                        <option value="">-- Select Issue Type --</option>
+                        {% for c in categories %}
+                            <option value="{{ c.id }}"
+                                {% if form_data.category == c.id|stringformat:"s" %}selected{% endif %}>
+                                {{ c.name }}
+                            </option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <!-- Description -->
+                <div class="mb-3">
+                    <label class="form-label">Describe the Issue</label>
+                    <textarea name="description" class="form-control" rows="4" required>{{ form_data.description }}</textarea>
+                </div>
+
+                <!-- Attachment -->
+                <div class="mb-3">
+                    <label class="form-label">Attachment (Optional)</label>
+                    <input type="text" name="attachment"
+                           value="{{ form_data.attachment }}"
+                           class="form-control">
+                    <small class="text-muted">Provide file path or URL</small>
+                </div>
+
+                <button type="submit" class="btn btn-primary btn-lg w-100 mt-2">
+                    Submit Issue
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <br><br>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

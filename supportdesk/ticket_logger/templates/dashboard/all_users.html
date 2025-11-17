@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>IT Helpdesk Dashboard</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            min-height: 100vh;
+        }
+        .sidebar {
+            min-height: 100vh;
+            background-color:#3b3ff7;
+        }
+        .sidebar a {
+            color: white;
+            text-decoration: none;
+        }
+        .sidebar a.active {
+            background-color: darkblue;
+            font-weight: bold;
+        }
+        .sidebar a:hover {
+            background-color:#3b3ff7;
+        }
+
+        .nav-top {
+            background-color:#3b3ff7;
+            
+        }
+    </style>
+</head>
+
+<body class="bg-light">
+
+<nav class="navbar navbar-dark nav-top px-4">
+    <span class="navbar-brand">Group 5 IT Service Desk</span>
+    <span class="text-white">
+        Logged in as: {{ Staff.first_name }} ({{ Staff.role }})
+    </span>
+</nav>
+
+<div class="container-fluid">
+    <div class="row">
+
+        <!-- Sidebar -->
+        <div class="col-md-2 sidebar d-flex flex-column p-3">
+            <h5 class="text-white mb-4">Menu</h5>
+            <a href="{% url 'dashboard' %}" class="mb-2 p-2 rounded">Issue</a>
+            <a href="{% url 'register_staff' %}" class="mb-2 p-2 rounded">Register User</a>
+            <a href="{% url 'all_users' %}" class="mb-2 p-2 rounded">View All User</a>
+            <a href="{% url 'logout_staff' %}" class="mb-2 p-2 rounded">Logout</a>
+        </div>
+
+        <!-- Main Content -->
+        <div class="col-md-10 p-4">
+
+            {% if messages %}
+                {% for m in messages %}
+                    <div class="alert alert-info">{{ m }}</div>
+                {% endfor %}
+            {% endif %}
+
+            <div class="card shadow p-3">
+                <h3 class="text-center mb-3">All Users</h3>
+
+                <table class="table table-striped table-hover">
+                    <thead class="table-primary">
+                        <tr>
+                            <th>First Name</th>
+                            <th>Last Name</th>
+                            <th>Email</th>
+                            <th>Role</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for u in users %}
+                        <tr>
+                            <td>{{ u.first_name }}</td>
+                            <td>{{ u.lastname }}</td>
+                            <td>{{ u.email }}</td>
+                            <td>{{ u.role }}</td>
+                            <td>
+                                <a href="" class="btn btn-sm btn-warning">Edit</a>
+                                <a href="" class="btn btn-sm btn-danger"
+                                   onclick="return confirm('Are you sure you want to delete this user?');">Delete</a>
+                            </td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="9" class="text-center">No users found.</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
