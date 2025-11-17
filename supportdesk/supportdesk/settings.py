@@ -39,7 +39,7 @@ SECRET_KEY = config["django"]["DJANGO_SECRET_KEY"]
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = config["django"]["DJANGO_DEBUG"]
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = config["allowed_host"]
 
 
 # Application definition
