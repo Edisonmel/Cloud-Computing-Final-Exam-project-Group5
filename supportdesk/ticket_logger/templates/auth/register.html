@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>IT Helpdesk Dashboard</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            min-height: 100vh;
+        }
+        .sidebar {
+            min-height: 100vh;
+            background-color:#3b3ff7;
+        }
+        .sidebar a {
+            color: white;
+            text-decoration: none;
+        }
+        .sidebar a.active {
+            background-color: darkblue;
+            font-weight: bold;
+        }
+        .sidebar a:hover {
+            background-color:#3b3ff7;
+        }
+
+        .nav-top {
+            background-color:#3b3ff7;
+            
+        }
+    </style>
+</head>
+
+<body class="bg-light">
+
+<nav class="navbar navbar-dark nav-top px-4">
+    <span class="navbar-brand">Group 5 IT Service Desk</span>
+    <span class="text-white">
+        Logged in as: {{ Staff.first_name }} ({{ Staff.role }})
+    </span>
+</nav>
+
+<div class="container-fluid">
+    <div class="row">
+
+        <!-- Sidebar -->
+        <div class="col-md-2 sidebar d-flex flex-column p-3">
+            <h5 class="text-white mb-4">Menu</h5>
+            <a href="{% url 'dashboard' %}" class="mb-2 p-2 rounded">Issue</a>
+            <a href="{% url 'register_staff' %}" class="mb-2 p-2 rounded active">Register User</a>
+            <a href="{% url 'all_users' %}" class="mb-2 p-2 rounded">View All User</a>
+            <a href="{% url 'logout_staff' %}" class="mb-2 p-2 rounded">Logout</a>
+        </div>
+
+        <!-- Main Content -->
+        <div class="col-md-10 p-4">
+
+            {% if messages %}
+                {% for m in messages %}
+                    <div class="alert alert-info">{{ m }}</div>
+                {% endfor %}
+            {% endif %}
+
+            <div class="card shadow p-3">
+                 <h3 class="text-center mb-3">Register User</h3>
+
+        {% if messages %}
+            {% for m in messages %}
+                <div class="alert alert-info">{{ m }}</div>
+            {% endfor %}
+        {% endif %}
+
+        <form method="POST">
+            {% csrf_token %}
+
+             <div class="mb-3">
+                <label class="form-label">First Name</label>
+                <input type="text" class="form-control" name="fistname" required>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Last Name</label>
+                <input type="text" class="form-control" name="lastname" required>
+            </div>
+
+
+            <div class="mb-3">
+                <label class="form-label">Email</label>
+                <input type="email" class="form-control" name="email" required>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Password</label>
+                <input type="password" class="form-control" name="password" required>
+            </div>
+
+            <div class="mb-3">
+            <label class="mt-2">Select Role</label>
+            <select name="role" class="form-control mb-3" required>
+                <option value="Lead">Lead</option>
+                <option value="Associate">Associate</option>
+            </select>
+            </div>
+
+            <button class="btn btn-primary w-100">Register</button>
+        </form>
+    </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
