@@ -43,11 +43,12 @@ def create_issue(request):
         # get ticket number for the created issue
         ticket_number = new_issue.ticket_number
 
-#         messages.success(
-#     request,
-#     f"Thank you {form_data["submitter_fullname"]}! Your issue has been submitted successfully. "
-#     f"Your ticket number is {ticket_number}. Please use it for further follow-up."
-# )
+        messages.success(
+        request,
+        f""" Thank you {form_data["submitter_fullname"]} for submitting your issue. 
+        Please ticket number has been sent to your email. Use for further follow up
+        """
+        )
         
         # Prepare email content
         # Prepare email content
