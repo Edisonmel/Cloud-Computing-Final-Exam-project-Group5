@@ -5,6 +5,8 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.hashers import make_password, check_password
 from functools import wraps
+from django.core.mail import send_mail,EmailMessage
+# from supportdesk.settings import EMAIL_HOST_USER
 
 
 
@@ -41,11 +43,30 @@ def create_issue(request):
         # get ticket number for the created issue
         ticket_number = new_issue.ticket_number
 
-        messages.success(
-    request,
-    f"Thank you! Your issue has been submitted successfully. "
-    f"Your ticket number is {ticket_number}. Please keep it for further follow-up."
-)
+#         messages.success(
+#     request,
+#     f"Thank you {form_data["submitter_fullname"]}! Your issue has been submitted successfully. "
+#     f"Your ticket number is {ticket_number}. Please use it for further follow-up."
+# )
+        
+        # Prepare email content
+        subject = f"Acknowledge Receipt of Ticket"
+        message = f"Thank you! Your issue has been submitted successfully. Your ticket number is {ticket_number}. Please keep it for further follow-up."
+
+
+        recipient_list = [form_data["submitter_email"]]  # Replace with the actual recipient(s)
+        EMAIL_HOST_USER  = ["edisonwacavan2015@gmail.com"]
+
+
+        # Send email
+        send_mail(
+            subject,
+            message,
+            EMAIL_HOST_USER,
+            recipient_list,
+            fail_silently=False,
+        )
+
         return redirect("create_issue")
 
     return render(request, "public/create_issue.html", {
