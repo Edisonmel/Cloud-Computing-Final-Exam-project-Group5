@@ -50,13 +50,15 @@ def create_issue(request):
 # )
         
         # Prepare email content
-        subject = f"Acknowledge Receipt of Ticket"
-        message = f"Thank you! Your issue has been submitted successfully. Your ticket number is {ticket_number}. Please keep it for further follow-up."
+        # Prepare email content
+        subject = "Acknowledge Receipt of Ticket"
+        message = (
+            f"Thank you! Your issue has been submitted successfully. "
+            f"Your ticket number is {ticket_number}. Please keep it for further follow-up."
+        )
 
-
-        recipient_list = form_data["submitter_email"]  # Replace with the actual recipient(s)
-        EMAIL_HOST_USER  = ["edisonwacavan2015@gmail.com"]
-
+        recipient_list = [form_data["submitter_email"]]  # Must be a list
+        EMAIL_HOST_USER = "edisonwacavan2015@gmail.com"  # Must be a string
 
         # Send email
         send_mail(
@@ -66,6 +68,7 @@ def create_issue(request):
             recipient_list,
             fail_silently=False,
         )
+
 
         return redirect("create_issue")
 
