@@ -54,7 +54,7 @@ def create_issue(request):
         message = f"Thank you! Your issue has been submitted successfully. Your ticket number is {ticket_number}. Please keep it for further follow-up."
 
 
-        recipient_list = [form_data["submitter_email"]]  # Replace with the actual recipient(s)
+        recipient_list = form_data["submitter_email"]  # Replace with the actual recipient(s)
         EMAIL_HOST_USER  = ["edisonwacavan2015@gmail.com"]
 
 
