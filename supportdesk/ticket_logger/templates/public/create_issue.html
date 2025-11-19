@@ -91,6 +91,7 @@
                 {% for m in messages %}
                     <div class="alert alert-{{ m.tags }} text-center">
                         {{ m }}
+                        <button type="button" class="btn-close float-end ms-2" data-bs-dismiss="alert" aria-label="Close"></button>
                     </div>
                 {% endfor %}
             {% endif %}
@@ -174,11 +175,8 @@
 
                 <!-- Attachment -->
                 <div class="mb-3">
-                    <label class="form-label">Attachment (Optional)</label>
-                    <input type="text" name="attachment"
-                           value="{{ form_data.attachment }}"
-                           class="form-control">
-                    <small class="text-muted">Provide file path or URL</small>
+                    <label class="form-label">Upload Supporting Documents (Optional)</label>
+                    <input type="file" name="attachment" value="{{ form_data.attachment }}" class="form-control">
                 </div>
 
                 <button type="submit" class="btn btn-primary btn-lg w-100 mt-2">

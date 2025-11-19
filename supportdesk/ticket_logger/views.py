@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect,get_object_or_404
 from django.contrib import messages
 from .models import Issue, IssueType,IssueAssignment,Staff
 from django.contrib.auth import authenticate, login, logout
@@ -6,7 +6,11 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.hashers import make_password, check_password
 from functools import wraps
 from django.core.mail import send_mail,EmailMessage
+from django.conf import settings
+from django.contrib.staticfiles.storage import staticfiles_storage
+import os
 # from supportdesk.settings import EMAIL_HOST_USER
+
 
 
 
@@ -20,7 +24,7 @@ def create_issue(request):
             "submitter_department": request.POST.get("submitter_department", "").strip(),
             "category": request.POST.get("category", ""),
             "description": request.POST.get("description", "").strip(),
-            "attachment": request.POST.get("attachment", "").strip(),
+            "attachment": request.FILES.get("attachment")
         }
 
         # Basic server-side validation
@@ -30,6 +34,27 @@ def create_issue(request):
         if missing:
             messages.error(request, "Please fill all required fields.")
             return render(request, "public/create_issue.html", {"categories": categories, "form_data": form_data})
+        
+        
+        ## Save the Uploaded file on File system
+        attachment = form_data["attachment"]
+        
+        if attachment:
+            
+            # STATIC ROOT for the app
+            upload_dir = os.path.join(settings.BASE_DIR, "ticket_logger", "static", "uploads")
+            os.makedirs(upload_dir, exist_ok=True)
+
+            # Full file path
+            file_path = os.path.join(upload_dir, attachment.name)
+
+            # Save the uploaded file manually
+            with open(file_path, "wb+") as dest:
+                for chunk in attachment.chunks():
+                    dest.write(chunk)
+
+            # Save the relative static path (used in templates)
+            saved_path = f"uploads/{attachment.name}"
 
         # Create Issue
         new_issue = Issue.objects.create(
@@ -37,7 +62,8 @@ def create_issue(request):
                     submitter_email=form_data["submitter_email"],
                     submitter_department=form_data["submitter_department"],
                     category_id=form_data["category"],
-                    description=form_data["description"]
+                    description=form_data["description"],
+                    attachment = saved_path
 )
 
         # get ticket number for the created issue
@@ -298,6 +324,29 @@ def update_ticket_status(request, issue_id):
     # Fallback
     return redirect("dashboard")
 
+@staff_login_required
+def edit_user(request, user_id):
+    user = get_object_or_404(Staff, id=user_id)
+
+    if request.method == "POST":
+        user.first_name = request.POST.get("fistname")
+        user.lastname = request.POST.get("lastname")
+        user.email = request.POST.get("email")
+        user.role = request.POST.get("role")
+
+        user.save()
+        messages.success(request, f"User '{user.first_name}' updated successfully.")
+        return redirect("all_users")
+
+    return render(request, "auth/edit_user.html", {"user": user})
+
+
+def delete_user(request, user_id):
+    user = get_object_or_404(Staff, id=user_id)
+
+    user.delete()
+    messages.success(request, "User deleted successfully.")
+    return redirect("all_users")
 
 
 
