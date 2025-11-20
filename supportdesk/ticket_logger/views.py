@@ -39,22 +39,22 @@ def create_issue(request):
         ## Save the Uploaded file on File system
         attachment = form_data["attachment"]
         
-        if attachment:
+        # if attachment:
             
-            # STATIC ROOT for the app
-            upload_dir = os.path.join(settings.BASE_DIR, "ticket_logger", "static", "uploads")
-            os.makedirs(upload_dir, exist_ok=True)
+        #     # STATIC ROOT for the app
+        #     upload_dir = os.path.join(settings.BASE_DIR, "ticket_logger", "static", "uploads")
+        #     os.makedirs(upload_dir, exist_ok=True)
 
-            # Full file path
-            file_path = os.path.join(upload_dir, attachment.name)
+        #     # Full file path
+        #     file_path = os.path.join(upload_dir, attachment.name)
 
-            # Save the uploaded file manually
-            with open(file_path, "wb+") as dest:
-                for chunk in attachment.chunks():
-                    dest.write(chunk)
+        #     # Save the uploaded file manually
+        #     with open(file_path, "wb+") as dest:
+        #         for chunk in attachment.chunks():
+        #             dest.write(chunk)
 
-            # Save the relative static path (used in templates)
-            saved_path = f"uploads/{attachment.name}"
+        #     # Save the relative static path (used in templates)
+        #     saved_path = f"uploads/{attachment.name}"
 
         # Create Issue
         new_issue = Issue.objects.create(
@@ -62,8 +62,7 @@ def create_issue(request):
                     submitter_email=form_data["submitter_email"],
                     submitter_department=form_data["submitter_department"],
                     category_id=form_data["category"],
-                    description=form_data["description"],
-                    attachment = saved_path
+                    description=form_data["description"]
 )
 
         # get ticket number for the created issue
