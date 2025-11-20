@@ -33,7 +33,7 @@
 <body class="bg-light">
 
 <nav class="navbar navbar-dark nav-top px-4">
-    <span class="navbar-brand">Group 5 IT Service Desk</span>
+    <span class="navbar-brand">Kigali Bytes IT Service Desk Dashboard</span>
     <span class="text-white">
         Logged in as: {{ Staff.first_name }} ({{ Staff.role }})
     </span>
@@ -45,9 +45,9 @@
         <!-- Sidebar -->
         <div class="col-md-2 sidebar d-flex flex-column p-3">
             <h5 class="text-white mb-4">Menu</h5>
-            <a href="{% url 'dashboard' %}" class="mb-2 p-2 rounded">Issue</a>
+            <a href="{% url 'dashboard' %}" class="mb-2 p-2 rounded">Tickets</a>
             <a href="{% url 'register_staff' %}" class="mb-2 p-2 rounded">Register User</a>
-            <a href="{% url 'all_users' %}" class="mb-2 p-2 rounded">View All User</a>
+            <a href="{% url 'all_users' %}" class="mb-2 p-2 rounded">Users</a>
             <a href="{% url 'logout_staff' %}" class="mb-2 p-2 rounded">Logout</a>
         </div>
 
